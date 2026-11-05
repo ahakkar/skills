@@ -1,0 +1,1 @@
+Contains skill experiments for AI agents. Agents do not learn so they must be taught from beginning every single time. Hopefully a repeatable skill which teaches what the agent must do saves the user's time and nerves.
