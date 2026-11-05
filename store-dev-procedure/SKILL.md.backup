@@ -28,5 +28,5 @@ Read relevant looking tech choices (architecture, programming language) from spe
 - If a dynamically typed language is used, what solution could work as the type check?
 
 # Store development procedure
-- Ask the user's github name which reviews and approves PR's.
+- Ask the user's github name which reviews and approves PR's and store it.
 - After user confirms the suggestions, write the resulting rules to the chosen location, with chosen tools and commands filled in, leaving out setup-only steps.

@@ -22,7 +22,7 @@ Read relevant looking tech choices (architecture, programming language) from spe
 # Suggest solutions for the following problems (user confirms):
 - Where to store this information so future agent sessions load it automatically (e.g. AGENTS.md imported from CLAUDE.md)?
 - GitHub issue template drafts if they don't exist yet?
-- How to implement a 90 char deterministic line length limit, enforced via a suitable solution like a shell script or simila?
+- For source code in /src folder only: How to implement a 90 char deterministic line length limit, enforced via a suitable solution like a shell script or simila?
 - A sitable linter depending on programming language and dev env?
 - How to check for test coverage of 90 % of lines (and 80 % of branches at least, if the test setup allows for branch coverage measurement)? This can run locally (make, dotnet or whatever the dev env uses) or in CI, with a script which reads the test report output deterministically with python or similar.
 - If a dynamically typed language is used, what solution could work as the type check?
