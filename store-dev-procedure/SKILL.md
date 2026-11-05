@@ -4,6 +4,8 @@ description: Set up and persist this project's development procedure (spec-drive
 disable-model-invocation: true
 ---
 
+First check git branch. If not in main, switch to main and pull latest changes from origin. If git is not initialized, stop and report to user.
+
 Read relevant looking tech choices (architecture, programming language) from spec at project folder first. If no spec exists, tell the user that work can't proceed without one and stop.
 
 # Rules about software project development
