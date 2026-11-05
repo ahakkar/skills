@@ -17,6 +17,7 @@ Read relevant looking tech choices (architecture, programming language) from spe
 - Spec must be changed before work is done if planned work doesn't match spec.
 - Spec change is a different commit first, and implementation follows in later commits if both are done in the same PR.
 - If using dynamically typed languages like python, at least all functions and methods and their return values must have type hints. If the language has a deterministic check limited to function and method parameters and return values, use it.
+- Every question to the user must contain an actual question, or called something else. Not a question is not a question.
 
 # Suggest solutions for the following problems (user confirms):
 - Where to store this information so future agent sessions load it automatically (e.g. AGENTS.md imported from CLAUDE.md)?
@@ -27,4 +28,5 @@ Read relevant looking tech choices (architecture, programming language) from spe
 - If a dynamically typed language is used, what solution could work as the type check?
 
 # Store development procedure
+- Ask the user's github name which reviews and approves PR's and store it.
 - After user confirms the suggestions, write the resulting rules to the chosen location, with chosen tools and commands filled in, leaving out setup-only steps.
