@@ -1,0 +1,29 @@
+---
+name: store-dev-procedure
+description: Set up and persist this project's development procedure (spec-driven dev, lint, coverage, typing)
+disable-model-invocation: true
+---
+
+Read relevant looking tech choices (architecture, programming language) from spec at project folder first. If no spec exists, tell the user that work can't proceed without one and stop.
+
+# Rules about software project development
+- Keep existing tooling unless the user agrees to change it.
+- When new packages or tools are needed, prompt user to add them, with short reasoning, don't add yourself.
+- Software development paradigm used is specification-driven development.
+- Issues and PRs on GitHub via gh.
+- No force push, no git clean.
+- Work is branch-based with PRs merged to main with squash merges.
+- GitHub user "ahakkar" approves and merges PRs manually, set them as reviewer for PRs.
+- Spec must be changed before work is done if planned work doesn't match spec.
+- Spec change is a different commit first, and implementation follows in later commits if both are done in the same PR.
+- If using dynamically typed languages like python, at least all functions and methods and their return values must have type hints. If the language has a deterministic check limited to function and method parameters and return values, use it (suggest something with short reasoning).
+
+# Suggest solutions for the following problems (user confirms):
+- Where to store this information so future agent sessions load it automatically (e.g. AGENTS.md imported from CLAUDE.md)?
+- GitHub issue template drafts if they don't exist yet?
+- How to implement a 90 char deterministic line length limit, enforced via a suitable solution like a shell script or simila?
+- A sitable linter depending on programming language and dev env?
+- How to check for test coverage of 90 % of lines (and 80 % of branches at least, if the test setup allows for branch coverage measurement)? This can run locally (make, dotnet or whatever the dev env uses) or in CI, with a script which reads the test report output deterministically with python or similar.
+
+# Store development procedure
+- After user confirms the suggestions, write the resulting rules to the chosen location, with chosen tools and commands filled in, leaving out setup-only steps.
