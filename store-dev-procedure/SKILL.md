@@ -1,6 +1,8 @@
 ---
 name: store-dev-procedure
 description: Set up and persist this project's development procedure (spec-driven dev, lint, coverage, typing)
+argument-hint: "[username]"
+arguments: [username]
 disable-model-invocation: true
 ---
 
@@ -15,7 +17,7 @@ Read relevant looking tech choices (architecture, programming language) from spe
 - Issues and PRs on GitHub via gh.
 - No force push, no git clean.
 - Work is branch-based with PRs merged to main with squash merges.
-- GitHub user "$user" approves and merges PRs manually, set them as reviewer for PRs.
+- GitHub user $username approves and merges PRs manually, set them as reviewer for PRs.
 - Spec must be changed before work is done if planned work doesn't match spec.
 - Spec change is a different commit first, and implementation follows in later commits if both are done in the same PR.
 - If using dynamically typed languages like python, at least all functions and methods and their return values must have type hints. If the language has a deterministic check limited to function and method parameters and return values, use it.
@@ -25,7 +27,7 @@ Read relevant looking tech choices (architecture, programming language) from spe
 - Where to store this information so future agent sessions load it automatically (e.g. AGENTS.md imported from CLAUDE.md)?
 - GitHub issue template drafts if they don't exist yet?
 - For source code in /src folder only: How to implement a 90 char deterministic line length limit, enforced via a suitable solution like a shell script or simila?
-- A sitable linter depending on programming language and dev env?
+- A suitable linter depending on programming language and dev env?
 - How to check for test coverage of 90 % of lines (and 80 % of branches at least, if the test setup allows for branch coverage measurement)? This can run locally (make, dotnet or whatever the dev env uses) or in CI, with a script which reads the test report output deterministically with python or similar.
 - If a dynamically typed language is used, what solution could work as the type check?
 
