@@ -6,4 +6,8 @@ arguments: [issue]
 disable-model-invocation: true
 ---
 
-Pick up the #$issue from GitHub via gh, start from a fresh pull off main. Implement the issue based on spec and push a new PR to GitHub unless some questions arise.
+If issue number is missing, stop work and ask what the issue number is.
+Pick up issue #$issue from GitHub via gh, starting from a fresh pull of main, and create a new issue branch.
+This is an explicit permission to work on that #$issue, commit to its branch, push the branch and open one PR for it.
+Implement the issue based on the spec. 
+If a question comes up, stop and ask before committing. 
