@@ -5,7 +5,7 @@ Fill this in during the run, not afterwards. The headings match the
 
 - Started: <date time>  Finished: <date time>
 - Target: <path or URL> at <commit or document versions>
-- Adapter: <file>  Lens: <file>
+- Adapter: <file>
 
 ## 1. Goal
 - Question, reader (role only), language and format.

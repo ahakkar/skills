@@ -17,8 +17,8 @@ allowed commands>
 
 ## 3. Lanes
 ### Agent A: <role>
-Owns: `data/<file>-a.yaml`, `prose/a.md`. IDs `A-01`…
-- <checklist from the lens, made specific to this target>
+Owns: `data/findings-a.yaml`, `prose/a.md`. IDs `A-01`…
+- <checklist for this lane, specific to the question and the target>
 
 ### Agent B: <role>
 ...
@@ -33,7 +33,7 @@ Stay in your lane. Something for another lane goes in one line under
 - Budget: at most <N> items per agent, ranked by importance.
 
 ## 5. Formats
-<schemas from the lens>
+<the findings schema and rules from the skill>
 - YAML: every file is a top-level list, `[]` if empty. Use `|` for multi-line text.
   Quote any string containing `:` `#` `{` `[` `*` `&` `!` `|` `>` `'` `"` `%` `@` or a
   leading `-`.
