@@ -29,7 +29,7 @@ Read by the orchestrator. Copy the parts lanes need into `BRIEF.md`.
   check the tool versions they need. `npm ci` or similar only with permission.
 
 ## What can be checked by running something
-- `uv run --no-project tool/check_citations.py --root <repo> data/*.yaml prose/*.md`
+- `uv run --no-project tool/check_citations.py --root <repo> data/*.yaml`
 - Build, type check, lint and tests, with each command and its result saved in `sources/`.
 - Measurements (frame time, memory, run time): the exact command, the hardware (CPU, GPU
   if relevant, RAM) and the output in `sources/`. One run is a sample, not a benchmark;

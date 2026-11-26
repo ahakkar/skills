@@ -37,11 +37,12 @@ Stay in your lane. Something for another lane goes in one line under
 - YAML: every file is a top-level list, `[]` if empty. Use `|` for multi-line text.
   Quote any string containing `:` `#` `{` `[` `*` `&` `!` `|` `>` `'` `"` `%` `@` or a
   leading `-`.
-- Prose: Markdown, `#` per section, no tables, no raw HTML.
+- Prose: Markdown, `#` per section, no tables, no raw HTML. No quotes: quotes live in the
+  YAML, where they are checked. Refer to findings by ID, e.g. `[A-01]`.
 
 ## 6. Finish
-- Run `uv run --no-project tool/check_citations.py --root <repo> data/*.yaml prose/*.md`
-  from this run directory. Fix your own items until it reports no MISSING or LOC.
+- Run `uv run --no-project tool/check_citations.py --root <repo> data/*.yaml` from this
+  run directory. Fix your own items until every quote is OK.
 - Run `typst compile report.typ REPORT.pdf` from this run directory. Other agents' files
   may still be empty stubs. If it fails on your file, fix your YAML or Markdown, never
   `report.typ`.

@@ -4,17 +4,17 @@
 # ///
 """Check that every quote exists at the cited path:line in the target repo.
 
-Usage: uv run --no-project check_citations.py --root REPO FILE...
+Usage: uv run --no-project check_citations.py --root REPO FILE.yaml...
 
-YAML files: any item (nested anywhere) with `location` and a non-empty `quote`.
-  `location` is "path:line", "path:start-end", or a list of them; the quote must
-  appear in at least one. Locations under sources/ resolve against the run directory
-  (the current directory), everything else against --root.
-Markdown files: `”quote” (path:line)` on one line.
+Checks any item (nested anywhere) with `location` and a non-empty `quote`.
+`location` is "path:line", "path:start-end", or a list of them; the quote must
+appear in at least one. Locations under sources/ resolve against the run directory
+(the current directory), everything else against --root.
 
-Quotes are compared after collapsing whitespace and unifying quote characters, so
-line breaks inside a quote are fine. A trailing or leading "…" is ignored; "…" in
-the middle is not allowed (it hides cut words).
+Quotes are compared after collapsing whitespace, joining hyphenated line breaks
+("Palvelui- den" -> "Palveluiden") and unifying quote characters, so line breaks
+inside a quote are fine. A leading or trailing "…" is ignored. A quote
+shortened in the middle is not in the file word for word, so it fails.
 Result per quote: OK, LOC (in the file but not at the cited lines), MISSING (not in
 the file) or BADLOC (unparseable location or no such file).
 Exit status 1 if anything is not OK.
@@ -27,14 +27,15 @@ from pathlib import Path
 import yaml
 
 LOC = re.compile(r"^(?P<path>[^:]+):(?P<a>\d+)(?:\s*[-–]\s*(?P<b>\d+))?$")
-MD_QUOTE = re.compile(r"”([^”]+)”\s*\(([^)]+)\)")
 
 
 def norm(s: str) -> str:
     for a, b in (("“", '"'), ("”", '"'), ("„", '"'), ("’", "'"), ("‘", "'"), ("–", "-")):
         s = s.replace(a, b)
     s = s.strip().strip("…").strip()
-    return re.sub(r"\s+", " ", s)
+    s = re.sub(r"\s+", " ", s)
+    s = re.sub(r"(\w)- (\w)", r"\1\2", s)
+    return re.sub(r"(\w)-$", r"\1", s)  # quote cut at a hyphenated line break
 
 
 @cache
@@ -57,8 +58,6 @@ def check_one(root: Path, loc: str, quote: str) -> str:
     if lines is None:
         return "BADLOC"
     q = norm(quote)
-    if "…" in q or "..." in q:
-        return "MISSING"
     a = int(m["a"])
     b = int(m["b"] or a)
     # Allow a quote to run one line past the cited range (common off-by-one at the end).
@@ -78,12 +77,6 @@ def check(root: Path, locs, quote: str) -> str:
 
 
 def quotes_in(path: Path):
-    if path.suffix == ".md":
-        for n, line in enumerate(path.read_text().splitlines(), 1):
-            for m in MD_QUOTE.finditer(line):
-                yield f"{path}:{n}", m[2], m[1]
-        return
-
     def walk(node):
         if isinstance(node, dict):
             if node.get("quote") and node.get("location"):

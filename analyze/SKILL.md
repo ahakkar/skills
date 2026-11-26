@@ -16,8 +16,8 @@ material), `template/` and `tool/`.
 - A quick look is allowed: size, languages, history, docs, tests. No cloning, converting,
   writing or agents before the user approves a proposal.
 - Proposal, in at most 15 lines:
-  - Adapter, by file name. Available now: `adapter/code.md`. If none fits, say so; don't
-    stretch one.
+  - Adapters, by file name. Available now: `adapter/code.md`, `adapter/documents.md`
+    (PDF, Word, Excel, PowerPoint). A paper with code uses both. If none fits, say so; don't stretch one.
   - Who reads the result, its language and format.
   - Lanes: how many agents, what each reads, which model. A small target needs one agent
     or none; that is a normal path, not a fallback.
@@ -25,9 +25,11 @@ material), `template/` and `tool/`.
   - Confidentiality: may results be published? For a security issue in someone else's
     live system, how does it reach the owner? Never print secrets, only their location.
 - At most 3 scoping questions, each an actual question.
-- After approval, read the chosen adapter in full before step 1.
+- After approval, read the chosen adapters in full before step 1.
 
 # 1. Environment check
+- Always `typst`, which builds the report. Its first build downloads the `cmarker`
+  package, so it needs network once.
 - Check every tool the plan needs (the adapter lists them). If one is missing, tell the
   user what that costs ("build checks will be skipped") and ask. Don't install anything
   without asking.
