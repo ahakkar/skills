@@ -20,7 +20,9 @@ merge, report), `template/` and `tool/`.
   - Adapters, by file name. Available now: `adapter/code.md`, `adapter/documents.md`
     (PDF, Word, Excel, PowerPoint). A paper with code uses both. If none fits, say so; don't stretch one.
   - Lens, by file name. Available now: `lens/review.md` (quality by area: scores, ranked
-    actions, tooling, documentation claims). If none fits, say so and ask; don't stretch one.
+    actions, tooling, documentation claims), `lens/appraise.md` (how far a paper's or a
+    system's claims hold: claim–evidence matrix, artifact check, options with effort).
+    If none fits, say so and ask; don't stretch one.
   - Who reads the result, its language and format.
   - Lanes: how many agents, what each reads, which model. A small target needs one agent
     or none; that is a normal path, not a fallback.
