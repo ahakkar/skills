@@ -1,6 +1,6 @@
 ---
 name: analyze
-description: Plan and run an evidence-based agentic analysis that answers one question about a code repository, a scientific paper (with any datasets or code its claims rest on) or a set of tender documents, in a Typst PDF report. Every finding cites a location a script can check.
+description: Plan and run an evidence-based agentic analysis that answers one question about a code repository, a scientific paper (with any datasets or code its claims rest on) or a set of  documents, in a Typst PDF report. Every finding cites a location a script can check.
 argument-hint: "[target] <question...>"
 arguments: [target]
 disable-model-invocation: true
@@ -19,7 +19,7 @@ picks the adapters; the lens still follows the question.
   `adapter/documents.md` (PDF, Word, Excel, PowerPoint). Usual lens: `lens/appraise.md`.
   `.csv` and Excel datasets go through the documents adapter. Other dataset formats have
   no adapter: say so; don't stretch one.
-- A collection of tender documents: `adapter/documents.md`. No lens fits yet: name the
+- A collection of e.g. tender documents: `adapter/documents.md`. No lens fits yet: name the
   kind, say that no lens fits, and stop.
 - A combination, such as a paper with the code its claims rest on: the adapters of every
   part.
