@@ -52,14 +52,12 @@ ones the question covers; the default is all five.
 - Judge each claim at the strength the target states it. Calibrate to the article type
   (a short article is not a full paper), but judge an empirical claim as one.
 - Lanes don't write the verdict, rank options or estimate effort. The merge does.
-- People are named by role (first author, participant 3), never by name, even where a
-  name appears in the data. The location is enough.
+- Refer to people by their role in the study (first author, participant 3).
 - An impression is not a finding. If it matters, say so in prose and label it unverified.
 - Numbers from released data are recomputed by script, with the command and output in
   `sources/`.
 - Novelty is judged from the target's own references unless the plan includes a
   literature search. `prose/method.md` says which.
-- An appraisal criticises named people's work. Record in `RUN.md` who may see it.
 
 ## Typical lanes
 Two, plus a third when the question is whether to build on the artifact. A short paper
