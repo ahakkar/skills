@@ -70,8 +70,8 @@ template can't produce is fixed in the skill's `template/`.
 
 - `chapters: [{key, title, tables}]`, in report order. Each chapter prints
   `prose/chapter-<key>.md`, then its tables, then its other findings. Typical:
-  - first, a reading guide: what the brief is and isn't, how to read a location, the
-    kinds, and the document map;
+  - first, a reading guide: what the brief is and isn't, how to read a citation (see
+    Report), the kinds, and the document map;
   - one chapter per part of the question;
   - last, what the documents leave open: the `open`, `conflict` and `gap` findings, so
     the reader finds what to ask in one place. The source run did this.
@@ -84,15 +84,27 @@ template can't produce is fixed in the skill's `template/`.
 - Examples from the tender briefing: key facts (`fact`, `value`), timeline (`date`,
   `event`, sorted by date, dates as `YYYY-MM-DD`), award criteria (`criterion`,
   `weight`, `assessed_from`).
-- The document map: `data/documents.yaml`, one entry per document, written at step 2.
-  The reading tiers go here instead of `RUN.md`, and `RUN.md` points to it. The merge
-  updates `why` from the lanes' document notes.
+- The document map and the list of sources: `data/documents.yaml`, one entry per
+  document in the order the list prints them, written at step 2 from each document's
+  own title page or first lines. The reading tiers go here instead of `RUN.md`, and
+  `RUN.md` points to it. The merge updates `why` from the lanes' document notes.
+  - `key`: the document's folder under `sources/`. Not `absence`, which holds searches.
+  - `short`: the label citations print. Unique, and readable at a glance among similar
+    names: `ITT A2` for annex 2 of the invitation to tender, not `Annex`.
+  - `title`, and `author` (who issued it), `date` and `note` (case number, version) when
+    the document gives them. `file`: the file name as given.
+  - `tier` and `why`.
 
       # data/documents.yaml
-      - key: call
-        title: "Invitation to tender (PDF, 24 pages)"
+      - key: a2
+        short: "ITT A2"
+        title: "Invitation to tender, annex 2: Description of the procurement"
+        author: "City of Example"
+        date: "2027-02-01"
+        note: "Case 123/2026, preliminary version"
+        file: "Preliminary ITT - Annex 2 Description of the procurement.pdf"
         tier: core
-        why: "Procedure, scope, timeline and award criteria."
+        why: "Scope, the systems to replace and the integrations."
 
       # data/meta.yaml
       tables:
@@ -100,7 +112,7 @@ template can't produce is fixed in the skill's `template/`.
           title: "Documents"
           file: data/documents.yaml
           columns:
-            - {key: key, name: "Key", width: auto}
+            - {key: short, name: "Label", width: auto}
             - {key: title, name: "Document", width: 2}
             - {key: tier, name: "Read", width: auto,
                values: {core: "closely", mine: "for points", stats: "by script", skip: "not read"}}
@@ -135,6 +147,12 @@ Copy this block and translate the values:
       weakened: "weakened"
       wrong: "wrong"               # also: a conflict the documents settle against it
       unverifiable: "not settled"  # a conflict the documents don't settle
+      sources: "Sources"           # the list of sources, last in the report
+      page: "p. {}"                # where a citation points: [ITT A2, p. 7]
+      slide: "slide {}"            # {} is the number, the sheet's name or the lines
+      sheet: "sheet {}"
+      row: "row {}"
+      line: "line {}"              # a .txt, .md or .csv source
 
 ## Typical lanes
 One lane per group of related documents, not per chapter: a contract stays with its
@@ -188,7 +206,18 @@ findings it cites. A sentence that says more than its findings, or judges, is li
 `RUN.md` and rewritten.
 
 ## Report
-`template/report-brief.typ`. Besides the core files it reads `prose/chapter-<key>.md`
-for every chapter, each table's `file`, and `chapters`, `tables` and `labels` in
-`meta.yaml`. Sections: summary; the chapters in order, each with its prose, tables and
-findings; lane notes; method and limits. Locations print as `path:line`, as in the core.
+`template/report-brief.typ`. Besides the core files it reads `data/documents.yaml`,
+`prose/chapter-<key>.md` for every chapter, each table's `file`, and `chapters`,
+`tables` and `labels` in `meta.yaml`. Sections: summary; the chapters in order, each
+with its prose, tables and findings; lane notes; method and limits; the list of sources.
+
+Citations: findings keep `path:line`, and `tool/check_citations.py` checks them as in
+the core. The report prints a location in `sources/<key>/` as the document's `short`
+label and where in the document it points, linked to the list of sources:
+- PDF `sources/a2/p07.txt:12`: `[ITT A2, p. 7]`, the physical page.
+- PowerPoint `s03.txt:4`: `[ITT A2, slide 3]`.
+- Excel `sheet02-Prices.txt:36`: `[ITT A2, sheet Prices, row 36]`. The name comes from
+  the file name, so punctuation in it shows as spaces.
+- Word `doc.txt:120`: `[ITT A2]`, since Word has no fixed pages.
+- A copied `.txt`, `.md` or `.csv`: `[ITT A2, line 12]`.
+Any other location, such as a gap's search in `sources/absence/`, prints as `path:line`.

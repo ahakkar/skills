@@ -14,10 +14,16 @@
 //     sort: the column that orders the rows (default: by ID, or file order)
 //   labels: every fixed text the report shows, in the report's language. The keys are in
 //     `label-keys` below and in lens/brief.md.
+// data/documents.yaml: [{key, short, title, author, date, note, file, ...}], one per
+//   document, in the order the list of sources prints them. `key` is its folder under
+//   sources/, `short` the label citations print. author, date, note, file are optional.
 // Also read: data/claim-check.yaml, prose/summary.md, prose/method.md, each table's file.
+// Locations stay path:line in the data. A location under sources/<key>/ of a listed
+// document prints as [short, page 7], linked to the list of sources; see `place` below.
 // The build stops on bad data: a missing label, a duplicate finding ID, an ID that no
 // finding has (prose included), a value outside its list in `allowed` below, a table
-// placed in no chapter or in two, a cell with no column, or a conflict with no `claim`.
+// placed in no chapter or in two, a cell with no column, a conflict with no `claim`, or
+// a document with no key, short or title, or with the same key or short as another.
 
 #import "@preview/cmarker:0.1.10"
 
@@ -32,6 +38,8 @@
 #let labels = meta.at("labels", default: (:))
 #let findings = lanes.map(l => load-list("data/findings-" + l.key + ".yaml")).flatten()
 #let checks = load-list("data/claim-check.yaml")
+#let documents = load-list("data/documents.yaml")
+#let document-of(k) = documents.find(d => str(d.at("key", default: "")) == k)
 #let chapter-file(c) = "prose/chapter-" + c.key + ".md"
 #let prose-files = (lanes.map(l => "prose/" + l.key + ".md") + chapters.map(chapter-file)
   + ("prose/summary.md", "prose/method.md"))
@@ -57,12 +65,22 @@
   "target", "version", "date", "agents", "contents", "summary", "facts", "id", "source",
   "conflicts-with", "searched", "check", "none", "lanes", "method",
   "open", "conflict", "gap", "suspected", "holds", "weakened", "wrong", "unverifiable",
+  "sources", "page", "slide", "sheet", "row", "line",
 )
 #fail-if(label-keys.filter(k => k not in labels), "Labels missing from data/meta.yaml")
 #let txt(k) = str(labels.at(k))
 
+#let dups(xs) = xs.filter(i => xs.filter(j => j == i).len() > 1).dedup()
 #let ids = findings.map(f => str(f.id))
-#fail-if(ids.filter(i => ids.filter(j => j == i).len() > 1).dedup(), "Duplicate finding IDs")
+#fail-if(dups(ids), "Duplicate finding IDs")
+
+#fail-if(documents.enumerate().map(((i, d)) => {
+  let missing = ("key", "short", "title").filter(k => d.at(k, default: none) == none)
+  if missing.len() > 0 { "entry " + str(i + 1) + " has no " + missing.join(", ") }
+}).filter(x => x != none), "data/documents.yaml")
+#fail-if(dups(documents.map(d => str(d.at("key", default: "")))), "Duplicate keys in data/documents.yaml")
+#fail-if(dups(documents.map(d => str(d.at("short", default: "")))),
+  "Duplicate `short` labels in data/documents.yaml")
 
 #let placed = chapters.map(c => c.at("tables", default: ()).map(str)).flatten()
 #let allowed = (
@@ -145,12 +163,52 @@
   ps.join(h(3pt))
 }
 
-// In a narrow table column a path may break after `/`.
+// Where in a document a converted file points, from the file names convert.py writes
+// (adapter/documents.md). `lines` is the cited line or range.
+#let put(k, v) = txt(k).replace("{}", v)
+#let place(file, lines) = {
+  let page = file.match(regex("^p(\\d+)\\.txt$"))
+  let slide = file.match(regex("^s(\\d+)\\.txt$"))
+  let sheet = file.match(regex("^sheet(\\d+)-(.*)\\.txt$"))
+  if page != none { put("page", str(int(page.captures.first()))) }
+  else if slide != none { put("slide", str(int(slide.captures.first()))) }
+  else if sheet != none {
+    let name = sheet.captures.at(1).replace("_", " ").trim()
+    put("sheet", if name == "" { str(int(sheet.captures.first())) } else { name })
+    ", " + put("row", lines)
+  }
+  else if file == "doc.txt" { none }  // Word has no fixed pages: the label alone.
+  else { put("line", lines) }        // .txt, .md or .csv copied as is.
+}
+
+// sources/<key>/<file>:<lines> of a document in data/documents.yaml -> (key, text).
+// Anything else, such as a gap's search in sources/absence/, -> none.
+#let loc-pattern = regex("^sources/([^/]+)/(.+):(\\d+)(?:\\s*[-–]\\s*(\\d+))?$")
+#let citation(l) = {
+  let m = str(l).trim().match(loc-pattern)
+  let d = if m != none { document-of(m.captures.first()) }
+  if d != none {
+    let (key, file, a, b) = m.captures
+    let p = place(file, if b == none or b == a { a } else { a + "–" + b })
+    (key: key, text: str(d.short) + if p != none { ", " + p })
+  }
+}
+
+// A cited document prints as [short, place], linked to the list of sources; any other
+// location as path:line. In a narrow table column a path may break after `/`.
 #let loc(l, wrap: false) = {
-  let one(x) = raw(if wrap { str(x).replace("/", "/\u{200B}") } else { str(x) })
-  if l == none { [—] }
-  else if type(l) == array { l.map(one).join(linebreak()) }
-  else { one(l) }
+  if l == none { return [—] }
+  let shown = ()
+  let out = ()
+  for x in if type(l) == array { l } else { (l,) } {
+    let c = citation(x)
+    let s = if c == none { str(x) } else { c.text }
+    if s in shown { continue }
+    shown.push(s)
+    out.push(if c == none { raw(if wrap { s.replace("/", "/\u{200B}") } else { s }) }
+      else { link(label("src-" + c.key), "[" + s + "]") })
+  }
+  out.join(linebreak())
 }
 
 #let width-of(c) = { let w = c.at("width", default: 1); if w == "auto" { auto } else { w * 1fr } }
@@ -312,3 +370,25 @@
 = #txt("method")
 
 #md-file("prose/method.md")
+
+// ---------- list of sources ----------
+
+= #txt("sources")
+
+#if documents.len() == 0 { none-recorded } else {
+  set par(justify: false)
+  grid(columns: (auto, 1fr), column-gutter: 1em, row-gutter: 0.9em,
+    ..documents.map(d => (
+      [#strong(str(d.short))#label("src-" + str(d.key))],
+      {
+        (emph(str(d.title)), ..("author", "date", "note")
+          .map(k => d.at(k, default: none)).filter(v => v != none).map(str)).join[. ]
+        [.]
+        if d.at("file", default: none) != none {
+          linebreak()
+          text(size: 10pt, raw(str(d.file)))
+        }
+      },
+    )).flatten(),
+  )
+}
