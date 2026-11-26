@@ -19,8 +19,8 @@ picks the adapters; the lens still follows the question.
   `adapter/documents.md` (PDF, Word, Excel, PowerPoint). Usual lens: `lens/appraise.md`.
   `.csv` and Excel datasets go through the documents adapter. Other dataset formats have
   no adapter: say so; don't stretch one.
-- A collection of e.g. tender documents: `adapter/documents.md`. No lens fits yet: name the
-  kind, say that no lens fits, and stop.
+- A collection of e.g. tender documents: `adapter/documents.md`. Usual lens:
+  `lens/brief.md`.
 - A combination, such as a paper with the code its claims rest on: the adapters of every
   part.
 
@@ -38,7 +38,9 @@ merge, report), `template/` and `tool/`.
   - The kind of target and the adapters it picks, by file name.
   - Lens, by file name. Available now: `lens/review.md` (quality by area: scores, ranked
     actions, tooling, documentation claims), `lens/appraise.md` (how far a paper's or a
-    system's claims hold: claim–evidence matrix, artifact check, options with effort).
+    system's claims hold: claim–evidence matrix, artifact check, options with effort),
+    `lens/brief.md` (what a document collection says about the question, facts only:
+    chapters by the question's parts, tables, what the documents leave open).
     If none fits, say so and ask; don't stretch one.
   - Who reads the result, its language and format.
   - Lanes: how many agents, what each reads, which model. A small target needs one agent
