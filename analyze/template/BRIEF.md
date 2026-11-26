@@ -14,6 +14,7 @@ Goal: <one sentence: the question and who reads the answer>.
 ## 2. Hard rules
 <from the adapter: read-only, own files only, no live services, no .env values,
 allowed commands>
+<from the lens: what lanes may judge, and what they leave to the merge>
 
 ## 3. Lanes
 ### Agent A: <role>
@@ -26,6 +27,9 @@ Owns: `data/findings-a.yaml`, `prose/a.md`. IDs `A-01`…
 Stay in your lane. Something for another lane goes in one line under
 "# Notes for other agents" at the end of your prose file.
 
+After all lanes finish, the merge may edit every file in `data/` and `prose/`, lane
+prose included: it removes duplicates, renames or removes IDs and changes severities.
+
 ## 4. Evidence
 - Location format: <from the adapter>.
 - Every item has a location you actually looked at and a verbatim quote of at most
@@ -33,7 +37,8 @@ Stay in your lane. Something for another lane goes in one line under
 - Budget: at most <N> items per agent, ranked by importance.
 
 ## 5. Formats
-<the findings schema and rules from the skill>
+<the findings schema and rules from the skill, with the lens's fields, and the schema
+of every other file a lane owns>
 - YAML: every file is a top-level list, `[]` if empty. Use `|` for multi-line text.
   Quote any string containing `:` `#` `{` `[` `*` `&` `!` `|` `>` `'` `"` `%` `@` or a
   leading `-`.
@@ -45,5 +50,6 @@ Stay in your lane. Something for another lane goes in one line under
   run directory. Fix your own items until every quote is OK.
 - Run `typst compile report.typ REPORT.pdf` from this run directory. Other agents' files
   may still be empty stubs. If it fails on your file, fix your YAML or Markdown, never
-  `report.typ`.
+  `report.typ`. It also stops on a value outside its list and on an ID no finding has;
+  the error names the file.
 - Reply in at most 5 lines: item counts and what you couldn't check.

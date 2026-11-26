@@ -11,7 +11,7 @@ Read by the orchestrator. Copy the parts lanes need into `BRIEF.md`.
   which). Never only into the scratchpad.
 
 ## Location format
-- `path:line` or `path:start-end`, relative to the repo root, e.g. `src/map.gd:142`.
+- `path:line` or `path:start-end`, relative to the repo root, e.g. `src/parser.c:142`.
 - `quote`: verbatim from that line range, at most 40 words. Whitespace may differ.
 - Generated, vendored and minified files are not evidence; cite the source that makes them.
 
@@ -25,7 +25,7 @@ Read by the orchestrator. Copy the parts lanes need into `BRIEF.md`.
 ## Environment check
 - Always: `git`, `uv` (to run `check_citations.py`).
 - The target's own toolchain, if any step builds, tests, runs or measures it: read the
-  build files (`package.json`, `Cargo.toml`, `project.godot`, `pyproject.toml`, …) and
+  build files (`package.json`, `Cargo.toml`, `go.mod`, `pyproject.toml`, …) and
   check the tool versions they need. `npm ci` or similar only with permission.
 
 ## What can be checked by running something
