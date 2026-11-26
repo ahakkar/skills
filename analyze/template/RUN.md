@@ -1,40 +1,44 @@
 # Run log: <title>
 
-Fill this in during the run, not afterwards. The headings match the
-`collect-analysis-facts` skill. Write "unknown" rather than guessing, and mark estimates.
+Fill this in during the run, step by step. `prose/method.md` is written from it.
 
-- Started: <date time>  Finished: <date time>
 - Target: <path or URL> at <commit or document versions>
-- Adapter: <file>  Lens: <file>
+- Adapters: <files>  Lens: <file>
 
-## 1. Goal
-- Question, reader (role only), language and format.
+## Plan (step 0)
+- The approved proposal: question, reader, language and format, lanes and models, what
+  will not be checked.
+- The scoping questions and their answers.
 
-## 2. Input
-- What was analysed and how much (files, lines, pages), from `sources/`.
+## Environment (step 1)
+- Tools and their versions. Missing tools and what they cost.
 
-## 3. Agent setup
-- Lanes, models, prompt. Per agent: tokens, tool calls and duration from the task
-  notification.
+## Material (step 2)
+- Code: the commit, and whether the commit or the working tree was analysed. A paper's
+  artifact: the study-time commit and how it was chosen.
+- Documents: per file its key, `sha256sum`, the conversion output and the reading tier.
+  Pages with no text.
 
-## 4. Tools and state
-- Tools and versions used, missing tools and their cost, where results are stored.
+## Pipeline test (step 4)
+- What was tested and what it caught.
 
-## 5. Verification
-- Pipeline test before launch: what was tested, what it caught.
-- Checker results per lane and after the merge (OK / LOC / MISSING).
-- Merge changes: duplicates removed, IDs renamed, severities changed.
-- Claim check: items checked, holds / weakened / wrong, what changed.
-- Not checked, and why.
+## Lanes (step 5)
+- Checker results per lane, rerun by the orchestrator (OK / LOC / MISSING).
+- Missing tools that agents reported, after checking them.
 
-## 6. Results
-- Item counts, what was selected or delivered, where it is.
+## Merge (step 6)
+- Each change: duplicates removed, IDs renamed or removed, severities changed, prose
+  edited.
+- Checker results after the merge.
 
-## 7. User's role
-- Decisions, corrections and questions from the user.
+## Claim check (step 7)
+- Items checked; holds / weakened / wrong; what changed as a result.
+- Facts from outside the target: the official source, or unchecked. Runtime claims: the
+  command and output in `sources/`, or unmeasured.
 
-## 8. Lessons
-- What worked, what didn't, what to change in the skill.
+## Absence checks
+- Each thing found missing, and the second search that confirmed it (file names,
+  contents, history).
 
-## 9. Confidentiality
-- People, organisations, security issues and non-public material in the results.
+## Not checked
+- What was left out, and why.

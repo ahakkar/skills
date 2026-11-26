@@ -9,7 +9,7 @@ Goal: <one sentence: the question and who reads the answer>.
 ## 1. Context
 - What the target is, its stack and size (from `sources/repo_stats.txt`), at commit `<sha>`.
 - Known quirks: framework versions, generated code, odd layout.
-- Claims to verify, not truth: <README, CLAUDE.md, current presentation text, paper>.
+- Claims to verify, not truth: <README, CLAUDE.md, other docs, paper>.
 
 ## 2. Hard rules
 <from the adapter: read-only, own files only, no live services, no .env values,

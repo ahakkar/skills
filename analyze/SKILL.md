@@ -27,8 +27,6 @@ merge, report), `template/` and `tool/`.
   - Lanes: how many agents, what each reads, which model. A small target needs one agent
     or none; that is a normal path, not a fallback.
   - What will not be checked.
-  - Confidentiality: may results be published? For a security issue in someone else's
-    live system, how does it reach the owner? Never print secrets, only their location.
 - At most 3 scoping questions, each an actual question.
 - After approval, read the chosen adapters and lens in full before step 1.
 
@@ -38,6 +36,7 @@ merge, report), `template/` and `tool/`.
 - Check every tool the plan needs (the adapter lists them). If one is missing, tell the
   user what that costs ("build checks will be skipped") and ask. Don't install anything
   without asking.
+- Record the tools, their versions and what is missing in `RUN.md`.
 
 # 2. Workspace and inventory
 - Results go in the target project, never only in the scratchpad:
@@ -55,7 +54,8 @@ merge, report), `template/` and `tool/`.
 - Take the inventory by script, as the adapter says, and save it in `sources/`.
 - Create every file `report.typ` reads, as `[]` or an empty `.md`, and fill
   `data/meta.yaml`. Both are listed at the top of `report.typ`.
-- Record the target's commit (or document versions) in `RUN.md`. All citations refer to it.
+- Record in `RUN.md` the approved plan, the answers to the scoping questions and the
+  target's commit (or document versions). All citations refer to that commit.
 - Ask once whether to commit the workspace.
 
 # 3. Brief
@@ -63,7 +63,8 @@ merge, report), `template/` and `tool/`.
 Copy into it everything they need from the adapter (location format, allowed commands),
 from the lens (its fields, judgement rules and lane checklists, made specific to the
 question and the target) and from Findings below.
-- README, CLAUDE.md, papers and existing presentation text are claims, not truth.
+- The target's own statements (README, CLAUDE.md, other docs, a paper) are claims to
+  check, not truth.
 - Don't put errors you've already found into the brief as examples; they steer agents.
 
 # 4. Test the pipeline before launch
@@ -73,7 +74,7 @@ question and the target) and from Findings below.
 - A template bug found here is fixed in the skill's `template/` too, not only in the copy.
   Agents never fix the template: a failed build means bad data.
 - `tool/check_citations.py` must fail on a made-up quote and on a wrong line.
-- Reset the data files to `[]`.
+- Reset the data files to `[]`. Record what the test caught in `RUN.md`.
 
 # 5. Lanes
 - Launch all lanes at once as `general-purpose` subagents (clean context, not forks).
@@ -107,7 +108,8 @@ Correct quotes don't make correct claims.
 # 8. Finish
 - Rerun the checkers, build `REPORT.pdf`, render the first, a middle and the last page to
   PNG and look at them.
-- `RUN.md` is complete: its headings match the `collect-analysis-facts` skill.
+- Every section of `RUN.md` is filled in or says why it is empty, and `prose/method.md`
+  agrees with it.
 - Final reply in at most 10 lines: the result, its limits, where the files are. Don't
   paste the output. Answer follow-ups shortest-first.
 - Later corrections go back into `data/` and the outputs, not only into the chat.
@@ -132,5 +134,7 @@ fields or their values.
 
 - A finding is a fact a reader can check, not an opinion. "Messy error handling" is not
   a finding; "12 bare `except:` clauses in `src/`" is.
+- A secret (key, password, token) is cited by its location. Its value never goes in a
+  quote or in prose.
 - Judgements that answer the question ("most of the paper's claims hold") go in the
   summary and rest on cited findings.
