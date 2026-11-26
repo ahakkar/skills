@@ -9,7 +9,8 @@ disable-model-invocation: true
 Target: $target. Full arguments: $ARGUMENTS (the target, then the question).
 
 Skill folder: `~/.claude/skills/analyze/`. It holds `adapter/` (how to read one kind of
-material), `template/` and `tool/`.
+material), `lens/` (what the analysis produces: added fields, judgement rules, lanes,
+merge, report), `template/` and `tool/`.
 
 # 0. Answer before acting
 - If the target or the question is missing, ask and stop.
@@ -18,6 +19,8 @@ material), `template/` and `tool/`.
 - Proposal, in at most 15 lines:
   - Adapters, by file name. Available now: `adapter/code.md`, `adapter/documents.md`
     (PDF, Word, Excel, PowerPoint). A paper with code uses both. If none fits, say so; don't stretch one.
+  - Lens, by file name. Available now: `lens/review.md` (quality by area: scores, ranked
+    actions, tooling, documentation claims). If none fits, say so and ask; don't stretch one.
   - Who reads the result, its language and format.
   - Lanes: how many agents, what each reads, which model. A small target needs one agent
     or none; that is a normal path, not a fallback.
@@ -25,7 +28,7 @@ material), `template/` and `tool/`.
   - Confidentiality: may results be published? For a security issue in someone else's
     live system, how does it reach the owner? Never print secrets, only their location.
 - At most 3 scoping questions, each an actual question.
-- After approval, read the chosen adapters in full before step 1.
+- After approval, read the chosen adapters and lens in full before step 1.
 
 # 1. Environment check
 - Always `typst`, which builds the report. Its first build downloads the `cmarker`
@@ -41,10 +44,10 @@ material), `template/` and `tool/`.
       BRIEF.md     lane instructions (from template/BRIEF.md)
       RUN.md       run log, filled in during the run (from template/RUN.md)
       sources/     inventories, command output, dumps: the evidence
-      data/*.yaml  meta, findings per lane, claim check
+      data/*.yaml  meta, findings per lane, claim check, the lens's own files
       prose/*.md   summary, method and one file per lane; no tables
       tool/        checkers copied from this skill
-      report.typ   copied from template/report.typ; never edited
+      report.typ   copied from template/report-<lens>.typ; never edited
       REPORT.pdf   the human-readable result
 
 - Take the inventory by script, as the adapter says, and save it in `sources/`.
@@ -55,8 +58,9 @@ material), `template/` and `tool/`.
 
 # 3. Brief
 `BRIEF.md` must stand alone: lane agents start with no context and never see this skill.
-Copy into it everything they need from the adapter (location format, allowed commands)
-and from Findings below, plus a checklist per lane made specific to the question.
+Copy into it everything they need from the adapter (location format, allowed commands),
+from the lens (its fields, judgement rules and lane checklists, made specific to the
+question and the target) and from Findings below.
 - README, CLAUDE.md, papers and existing presentation text are claims, not truth.
 - Don't put errors you've already found into the brief as examples; they steer agents.
 
@@ -80,7 +84,8 @@ and from Findings below, plus a checklist per lane made specific to the question
 
 # 6. Merge
 - Remove duplicates (keep the better write-up) and calibrate across lanes. Rename or
-  remove IDs everywhere they appear, prose included. Record each change in `RUN.md`.
+  remove IDs everywhere they appear, lane prose included. Record each change in `RUN.md`.
+- Then do the lens's merge.
 - Write `prose/summary.md`: the answer to the question, then what could not be checked.
   Each sentence ends with the finding IDs it rests on, e.g. `[A-01, B-03]`.
 - Write `prose/method.md` from `RUN.md`: lanes, checks and limits.
@@ -88,10 +93,10 @@ and from Findings below, plus a checklist per lane made specific to the question
 # 7. Claim check
 Correct quotes don't make correct claims.
 - A separate clean-context agent re-reads the cited sources for every `high` finding,
-  every finding the summary cites, every synthesis or contradiction across sources, and
-  every number that will be published. Verdicts go in `data/claim-check.yaml` as
-  `{id, verdict, note}`: `holds`, `weakened` or `wrong`, with its own evidence. Fix or
-  remove `wrong`; downgrade `weakened`.
+  every finding the summary cites, every item the lens marks, every synthesis or
+  contradiction across sources, and every number that will be published. Verdicts go in
+  `data/claim-check.yaml` as `{id, verdict, note}`: `holds`, `weakened` or `wrong`, with
+  its own evidence. Fix or remove `wrong`; downgrade `weakened`.
 - Facts from outside the target (standards, rules, APIs) are checked against an official
   source or marked unchecked. Never from model memory.
 - Runtime claims are measured with the command and output saved in `sources/`, or
@@ -119,6 +124,9 @@ a top-level list, `[]` if empty:
         location: paper/main.tex:212
         quote: "94 % accuracy on the held-out set"
         status: wrong        # holds | weakened | wrong | unverifiable
+
+A lens adds fields to this schema and sections to its report. It doesn't change these
+fields or their values.
 
 - A finding is a fact a reader can check, not an opinion. "Messy error handling" is not
   a finding; "12 bare `except:` clauses in `src/`" is.
