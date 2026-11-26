@@ -1,24 +1,41 @@
 ---
 name: analyze
-description: Plan and run an evidence-based agentic analysis of a code repository, paper or document set that answers a question in a Typst PDF report. Every finding cites a location a script can check.
-argument-hint: "[target] [question...]"
+description: Plan and run an evidence-based agentic analysis that answers one question about a code repository, a scientific paper (with any datasets or code its claims rest on) or a set of  documents, in a Typst PDF report. Every finding cites a location a script can check.
+argument-hint: "[target] <question...>"
 arguments: [target]
 disable-model-invocation: true
 ---
 
-Target: $target. Full arguments: $ARGUMENTS (the target, then the question).
+The task: an analysis that answers one question about a target. The main output is a
+human-readable PDF report, `REPORT.pdf`, compiled with Typst. If the question is
+missing, ask and stop.
+
+The target: the `target` argument, or the current folder when it is left out. A quick
+look tells what it is: size, file types, languages, history, docs, tests. No cloning,
+converting, writing or agents before the user approves a proposal. The kind of target
+picks the adapters; the lens still follows the question.
+- A program code repository: `adapter/code.md`. Usual lens: `lens/review.md`.
+- A scientific paper, optionally with datasets its claims rest on:
+  `adapter/documents.md` (PDF, Word, Excel, PowerPoint). Usual lens: `lens/appraise.md`.
+  `.csv` and Excel datasets go through the documents adapter. Other dataset formats have
+  no adapter: say so; don't stretch one.
+- A collection of e.g. tender documents: `adapter/documents.md`. No lens fits yet: name the
+  kind, say that no lens fits, and stop.
+- A combination, such as a paper with the code its claims rest on: the adapters of every
+  part.
+
+None of these: stop and ask the user.
+
+Arguments: $ARGUMENTS. The first word, $target, is the target if it is an existing path
+or URL. If not, it is the start of the question, and the target is the current folder.
 
 Skill folder: `~/.claude/skills/analyze/`. It holds `adapter/` (how to read one kind of
 material), `lens/` (what the analysis produces: added fields, judgement rules, lanes,
 merge, report), `template/` and `tool/`.
 
 # 0. Answer before acting
-- If the target or the question is missing, ask and stop.
-- A quick look is allowed: size, languages, history, docs, tests. No cloning, converting,
-  writing or agents before the user approves a proposal.
 - Proposal, in at most 15 lines:
-  - Adapters, by file name. Available now: `adapter/code.md`, `adapter/documents.md`
-    (PDF, Word, Excel, PowerPoint). A paper with code uses both. If none fits, say so; don't stretch one.
+  - The kind of target and the adapters it picks, by file name.
   - Lens, by file name. Available now: `lens/review.md` (quality by area: scores, ranked
     actions, tooling, documentation claims), `lens/appraise.md` (how far a paper's or a
     system's claims hold: claim–evidence matrix, artifact check, options with effort).
