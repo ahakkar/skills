@@ -12,7 +12,7 @@ Read by the orchestrator. Copy the parts lanes need into `BRIEF.md`.
 - Too much to read closely: give each file a reading tier next to its key in `RUN.md`,
   and say in `BRIEF.md` how each lane reads its files. `core`: read closely. `mine`: pull
   out specific points. `stats`: summarise by script, plus samples. `skip`: one line why.
-- `.txt`, `.md` and `.csv` need no conversion: copy them into `sources/`.
+- `.txt`, `.md` and `.csv` need no conversion: copy each into `sources/<key>/`.
 - PDF pages are physical pages, not the printed page numbers. Say so in `prose/method.md`.
 - A PDF page with no text is an image. List it in `RUN.md`; read it as an image or mark
   it unchecked.
