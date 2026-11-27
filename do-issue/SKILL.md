@@ -13,5 +13,5 @@ disable-model-invocation: true
 - Issue scope might be too large. Consider how many added lines of any origin it could produce, and if the scope looks too large,s top and consult the user.
 - This is an explicit permission to work on that #$issue, commit to its branch, push the branch and open one PR for it.
 - Implement the issue based on the spec. 
-- If during implementation it looks like the added lines of any origin except migrations go over 500 lines, work should be stopped and issue divided into smaller sub-issues.
+- If during implementation it looks like the added lines of any origin except migrations go over ~600 lines, work should be stopped and issue divided into smaller sub-issues.
 - If a question comes up, stop and ask before committing. 
